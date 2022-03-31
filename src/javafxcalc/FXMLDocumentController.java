@@ -6,6 +6,7 @@ package javafxcalc;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,7 +24,6 @@ import javax.script.ScriptException;
  *
  * @author PerlaMay
  */
-
 public class FXMLDocumentController implements Initializable {
 
     @FXML
@@ -65,12 +65,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button divide;
     @FXML
-    private Button backspace;
+    private Button endp;
+    @FXML
+    private Button opp;
+    @FXML
+    private Button bxspace;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         // TODO
     }
+
+    boolean eqerror;
 
     @FXML
     private void btn7(ActionEvent event) {
@@ -158,29 +165,43 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void btnerase(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Ambut unsaon ni hahahaha hunahunaon lng nko unya");
-    }
-
-    @FXML
     private void btnequals(ActionEvent event) {
         //code from: https://coderanch.com/t/427393/java/Convert-String-expression
-     String expression = display.getText();
- 
+        String expression = display.getText();
+
         // Get JavaScript engine
         ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
- 
+
         try {
             // Evaluate the expression
             Object result = engine.eval(expression);
- 
+
             display.setText(expression + "\n= " + result);
-        }
-        catch (ScriptException e) {
+        } catch (ScriptException e) {
             // Something went wrong
             e.printStackTrace();
+            if(eqerror = true){
+                display.setText(" ");
+            }
+            display.setText(expression + "\n= error");
+            eqerror = true;
         }
     }
 
+    @FXML
+    private void btnendp(ActionEvent event) {
+        display.setText(display.getText() + "(");
+    }
+
+    @FXML
+    private void btnopp(ActionEvent event) {
+        display.setText(display.getText() + ")");
+    }
+
+    @FXML
+    private void btnbxspace(ActionEvent event) {
+        int l = display.getText().length();
+        display.getText().substring(0, l - 1);
+    }
 
 }
